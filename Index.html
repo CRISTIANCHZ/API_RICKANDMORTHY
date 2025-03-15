@@ -7,14 +7,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Buscar Personaje</h1>
-    
-    <div>
-        <input type="text" id="searchInput" placeholder="El nombre va aquí">
-        <button id="searchButton">Click aquí para buscar</button>
-    </div>
+    <h1>Personajes de Rick and Morty</h1>
+    <div id="grid-container"></div>
 
-    <div class="results" id="resultsContainer"></div>
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img id="modal-image" src="" alt="">
+            <h2 id="modal-name"></h2>
+            <p><strong>Localización:</strong> <span id="modal-location"></span></p>
+            <p><strong>Origen:</strong> <span id="modal-origin"></span></p>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

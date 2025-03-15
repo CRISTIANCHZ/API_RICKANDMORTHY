@@ -1,50 +1,40 @@
-document.getElementById('searchButton').addEventListener('click', function() {
-    const searchInput = document.getElementById('searchInput').value.trim();
-    if (searchInput) {
-        fetchCharacters(searchInput);
-    } else {
-        alert('Por favor, introduce el nombre de un personaje.');
-    }
-});
+document.addEventListener("DOMContentLoaded", () => {
+    const gridContainer = document.getElementById("grid-container");
+    const modal = document.getElementById("modal");
+    const modalImage = document.getElementById("modal-image");
+    const modalName = document.getElementById("modal-name");
+    const modalLocation = document.getElementById("modal-location");
+    const modalOrigin = document.getElementById("modal-origin");
+    const closeBtn = document.querySelector(".close");
 
-function fetchCharacters(query) {
-    const url = `https://rickandmortyapi.com/api/character/?name=${query}`;
-   
-    fetch(url)
+    fetch("https://rickandmortyapi.com/api/character")
         .then(response => response.json())
         .then(data => {
-            if (data.results && data.results.length > 0) {
-                displayResults(data.results);
-            } else {
-                displayMessage('No se encontraron personajes con ese nombre.');
-            }
-        })
-        .catch(error => {
-            console.error('Error al buscar personajes:', error);
-            displayMessage('Hubo un error al obtener los datos.');
+            data.results.forEach(character => {
+                const card = document.createElement("div");
+                card.classList.add("card");
+                card.innerHTML = `
+                    <img src="${character.image}" alt="${character.name}">
+                    <h2>${character.name}</h2>
+                `;
+                card.addEventListener("click", () => {
+                    modalImage.src = character.image;
+                    modalName.textContent = character.name;
+                    modalLocation.textContent = character.location.name;
+                    modalOrigin.textContent = character.origin.name;
+                    modal.style.display = "block";
+                });
+                gridContainer.appendChild(card);
+            });
         });
-}
 
-function displayResults(characters) {
-    const resultsContainer = document.getElementById('resultsContainer');
-    resultsContainer.innerHTML = ''; // Limpiar resultados previos
-
-    characters.forEach(character => {
-        const characterCard = document.createElement('div');
-        characterCard.classList.add('character-card');
-       
-        characterCard.innerHTML = `
-            <img src="${character.image}" alt="${character.name}">
-            <h3>${character.name}</h3>
-            <p>Estado: ${character.status}</p>
-            <p>Especie: ${character.species}</p>
-        `;
-
-        resultsContainer.appendChild(characterCard);
+    closeBtn.addEventListener("click", () => {
+        modal.style.display = "none";
     });
-}
 
-function displayMessage(message) {
-    const resultsContainer = document.getElementById('resultsContainer');
-    resultsContainer.innerHTML = `<p>${message}</p>`;
-}
+    window.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+});
